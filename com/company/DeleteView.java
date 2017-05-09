@@ -3,6 +3,7 @@ package com.company;
 import com.company.controllers.*;
 
 import javax.swing.*;
+import java.io.IOException;
 
 /**
  * Created by alex o n 11.04.2017.
@@ -16,8 +17,10 @@ public class DeleteView {
     JButton deleteButton2;
     JButton deleteButton3;
     RequestManager dataBaseManipulation;
-    public DeleteView(RequestManager dataBaseManipulation){
+    View view;
+    public DeleteView(RequestManager dataBaseManipulation, View view){
         this.dataBaseManipulation=dataBaseManipulation;
+        this.view=view;
         jDialog=new JDialog();
         createElementsOfWindow();
     }
@@ -35,9 +38,9 @@ public class DeleteView {
         deleteButton3.setBounds(20, higthAligment + 110, 300, 20);
         jDialog.add(deleteButton3);
 
-        deleteButton3.addActionListener(new DeleteByNameAndNumberOfWorkListener(this, dataBaseManipulation));
-        deleteButton2.addActionListener(new DeleteByNameAndWorkListener(this, dataBaseManipulation));
-        deleteButton1.addActionListener(new DeleteByNameAndGroupListener(this, dataBaseManipulation));
+        deleteButton3.addActionListener(new DeleteByNameAndNumberOfWorkListener(this, dataBaseManipulation,view));
+        deleteButton2.addActionListener(new DeleteByNameAndWorkListener(this, dataBaseManipulation,view));
+        deleteButton1.addActionListener(new DeleteByNameAndGroupListener(this, dataBaseManipulation,view));
     }
 
     public void removeBottons() {/**/
@@ -45,7 +48,14 @@ public class DeleteView {
         jDialog.remove(deleteButton2);
         jDialog.remove(deleteButton3);
     }
-
+    public void showCountOfDeletingStudents(int count){
+        jDialog.setVisible(false);
+        if (count!=0){
+            JOptionPane.showMessageDialog(new JFrame(), "Записей найдено и удалено "+count);
+        }
+        else JOptionPane.showMessageDialog(new JFrame(), "Записей не найдено");
+        view.renderTable();
+    }
     public JDialog getjDialog() {
         return jDialog;
     }

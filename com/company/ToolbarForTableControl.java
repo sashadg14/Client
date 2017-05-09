@@ -1,24 +1,26 @@
-package com.company.resourses;
+package com.company;
 
-import com.company.controllers.PageManipulator;
+import com.company.controllers.RequestManager;
+import com.company.model.Table;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 /**
  * Created by alex o n 23.04.2017.
  */
 public class ToolbarForTableControl {
-    PageManipulator pageManipulator;
+    RequestManager requestManager;
     Window window;
     JButton leftButton;
     JButton rightButton;
     JButton leftButtonToEnd;
     JButton rightButtonToEnd;
-    public ToolbarForTableControl(PageManipulator pageManipulator, Window window){
-        this.pageManipulator=pageManipulator;
+    public ToolbarForTableControl(RequestManager requestManager, Window window, Table table){
+        this.requestManager=requestManager;
         this.window=window;
         leftButton = new JButton();
         rightButton = new JButton();
@@ -34,34 +36,53 @@ public class ToolbarForTableControl {
         jToolBarSecond.add(rightButton);
         jToolBarSecond.add(rightButtonToEnd);
         jToolBarSecond.setBounds(800,800,1600,30);
-        setListeners();
+        setListeners(table);
         window.add(jToolBarSecond);
     }
-
-    private void setListeners()
-    {
+    private void setListeners(final Table table) {
         rightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                pageManipulator.NextPage();
+                requestManager.nextPageRequest();
+                try {
+                    table.renderTable(requestManager.getBasicPage());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
+
         leftButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                pageManipulator.PreviousPage();
+                requestManager.previousPageRequest();
+                try {
+                    table.renderTable(requestManager.getBasicPage());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
         rightButtonToEnd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                pageManipulator.LastPage();
+                requestManager.lastPageRequest();
+                try {
+                    table.renderTable(requestManager.getBasicPage());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
         leftButtonToEnd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                pageManipulator.FirstPage();
+                requestManager.firstPageRequest();
+                try {
+                    table.renderTable(requestManager.getBasicPage());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

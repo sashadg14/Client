@@ -1,12 +1,14 @@
 /**
  * Created by alex o n 23.04.2017.
  */
+import com.company.View;
+import com.company.controllers.RequestManager;
+
 import java.io.*;
 import java.net.*;
 
 public class Client {
     public static void main(String[] args) throws IOException {
-
         System.out.println("Welcome to Client side");
 
         Socket fromserver = null;
@@ -24,12 +26,14 @@ public class Client {
                 InputStreamReader(fromserver.getInputStream()));
         PrintWriter out = new PrintWriter(fromserver.getOutputStream(),true);
         BufferedReader inu = new BufferedReader(new InputStreamReader(System.in));
+        RequestManager requestManager = new RequestManager(in,out);
+        View view = new View(requestManager);
 
         String fuser = null,fserver;
 
         while (true) {
             if((fuser = inu.readLine())!=null);
-                    addStudent(in, out);
+                    //addStudent(in, out);
             if (fuser.equalsIgnoreCase("close")) break;
             if (fuser.equalsIgnoreCase("exit")) break;
         }
@@ -39,7 +43,7 @@ public class Client {
         fromserver.close();
     }
 
-    static void addStudent(BufferedReader bufferedReader,PrintWriter out) throws IOException {
+    /*static void addStudent(BufferedReader bufferedReader,PrintWriter out) throws IOException {
         out.println("ADD");
         for(int i=0;i<14;i++){
             out.println(i+" chislo");
@@ -58,5 +62,5 @@ public class Client {
             }
             count--;
         }
-    }
+    }*/
 }

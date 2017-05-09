@@ -1,11 +1,13 @@
 package com.company.controllers;
 
 import com.company.DeleteView;
+import com.company.View;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 /**
  * Created by alex o n 23.04.2017.
@@ -13,8 +15,10 @@ import java.awt.event.ActionListener;
 public class DeleteByNameAndWorkListener implements ActionListener {
     DeleteView deleteView;
     RequestManager dataBaseManipulation;
-    public DeleteByNameAndWorkListener(DeleteView deleteView, RequestManager dataBaseManipulation){
+    View view;
+    public DeleteByNameAndWorkListener(DeleteView deleteView, RequestManager dataBaseManipulation, View view){
         this.deleteView=deleteView;
+        this.view=view;
         this.dataBaseManipulation=dataBaseManipulation;
     }
     @Override
@@ -39,7 +43,12 @@ public class DeleteByNameAndWorkListener implements ActionListener {
         jButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                dataBaseManipulation.deleteStudentByNameAndWork(name.getText(),work.getText());
+                try {
+                   deleteView.showCountOfDeletingStudents(dataBaseManipulation.deleteStudentByNameAndWorkRequest(name.getText(),work.getText()));
+                    view.renderTable();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 deleteView.getjDialog().setVisible(false);
             }
         });

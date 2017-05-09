@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -19,27 +20,27 @@ public class AddView {
     int heigth=20;
     int width=100;
     TextField fistNameField;
-    TextField surNameField;
+    TextField middleNameField;
     TextField lastNameField;
     TextField groupField;
     ArrayList<TextField> publicWorkFieldArray;
     RequestManager dataBaseManipulation;
-    public AddView(RequestManager dataBaseManipulation){
+    public AddView(RequestManager dataBaseManipulation, View view){
         this.dataBaseManipulation=dataBaseManipulation;
         jDialog=new JDialog();
         publicWorkFieldArray= new ArrayList<TextField>();
         jDialog.getContentPane().setLayout(null);
         jDialog.setSize(500,500);
         jDialog.setVisible(true);
-        createElementsOfWindow();
+        createElementsOfWindow(view);
     }
-    void createElementsOfWindow(){
+    void createElementsOfWindow(final View view){
         fistNameField = new TextField();
         fistNameField.setBounds(leftAligment,0,width,heigth);
         jDialog.add(fistNameField);
-        surNameField = new TextField();
-        surNameField.setBounds(leftAligment, (int) (heigth*1.5),width,heigth);
-        jDialog.add(surNameField);
+        middleNameField = new TextField();
+        middleNameField.setBounds(leftAligment, (int) (heigth*1.5),width,heigth);
+        jDialog.add(middleNameField);
         lastNameField = new TextField();
         lastNameField.setBounds(leftAligment,heigth*3,width,heigth);
         jDialog.add(lastNameField);
@@ -54,16 +55,16 @@ public class AddView {
             jLabel.setBounds(50,(int) (heigth*(7.5+1.5*i)),80,heigth);
             jDialog.add(jLabel);
         }
-        JLabel firstName = new JLabel("Фамилия");
+        final JLabel firstName = new JLabel("Фамилия");
         firstName.setBounds(50,0,100,20);
         jDialog.add(firstName);
-        JLabel secondName = new JLabel("Имя(инициалы)");
-        secondName.setBounds(50,(int) (heigth*1.5),100,20);
-        jDialog.add(secondName);
-        JLabel lastName = new JLabel("Отчество(инициалы)");
+        final JLabel middleName = new JLabel("Имя(инициалы)");
+        middleName.setBounds(50,(int) (heigth*1.5),100,20);
+        jDialog.add(middleName);
+        final JLabel lastName = new JLabel("Отчество(инициалы)");
         lastName.setBounds(50, heigth*3,150,20);
         jDialog.add(lastName);
-        JLabel group = new JLabel("группа");
+        final JLabel group = new JLabel("группа");
         group.setBounds(50,(int) (heigth*4.5),150,20);
         jDialog.add(group);
         JLabel publicWork = new JLabel("Общественные работы");
@@ -74,9 +75,21 @@ public class AddView {
         jButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-            dataBaseManipulation.AddNewStudentInBase(AddView.this);
-
-            jDialog.setVisible(false);
+                ArrayList<String> strings = new ArrayList<>();
+                strings.add(fistNameField.getText());
+                strings.add(middleNameField.getText());
+                strings.add(lastNameField.getText());
+                strings.add(groupField.getText());
+                for(TextField textField: publicWorkFieldArray){
+                    strings.add(textField.getText());
+                }
+                try {
+                    dataBaseManipulation.AddNewStudentInBase(strings);
+                    view.renderTable();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                jDialog.setVisible(false);
             }
         });
         jDialog.add(jButton);
@@ -84,23 +97,4 @@ public class AddView {
 
     }
 
-    public TextField getFistNameField() {
-        return fistNameField;
-    }
-
-    public TextField getSurNameField() {
-        return surNameField;
-    }
-
-    public TextField getLastNameField() {
-        return lastNameField;
-    }
-
-    public TextField getGroupField() {
-        return groupField;
-    }
-
-    public ArrayList<TextField> getPublicWorkFieldArray() {
-        return publicWorkFieldArray;
-    }
 }

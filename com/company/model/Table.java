@@ -23,7 +23,7 @@ public class Table {
         jLable= new JLabel[10];
     }
 
-    public void renderTable(ArrayList<Student> studentArrayList) {
+    public void renderTable(ArrayList<String[]> stringArrayList) {
         for(Component component:componentArrayList){
             window.remove(component);
         }
@@ -58,25 +58,25 @@ public class Table {
             jLable[i].setBounds(widh*(2+i),70,widh,heigth);
             window.add(jLable[i]);
         }
-        for(Student student: studentArrayList){
-            createRow(student,studentArrayList);
+        for(String[] stringsArr: stringArrayList){
+            createRow(stringsArr,stringArrayList.indexOf(stringsArr));
         }
         window.update(window.getGraphics());
-        // System.out.println(studentArrayList.get(0).getGroup()+" ------");
+        // System.out.println(stringArrayList.get(0).getGroup()+" ------");
 
     }
 
-   void createRow(Student student, ArrayList<Student> studentArrayList){
-       JLabel name = new JLabel(" "+student.getFirstName()+" "+student.getMiddleName()+" "+student.getLastName());
-       name.setBounds(0,90+(heigth*studentArrayList.indexOf(student)),widh,heigth);
+   void createRow(String[] strings, int index){
+       JLabel name = new JLabel(" "+strings[0]+" "+strings[1]+" "+strings[2]);
+       name.setBounds(0,90+(heigth*index),widh,heigth);
        //System.out.println(name.getY()+"----");
        name.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
        //name.setHorizontalAlignment(JLabel.CENTER);
        name.setVerticalAlignment(JLabel.CENTER);
        window.add(name);
        componentArrayList.add(name);
-       JLabel group = new JLabel(student.getGroup());
-       group.setBounds(widh,90+(heigth*studentArrayList.indexOf(student)),widh,heigth);
+       JLabel group = new JLabel(strings[3]);
+       group.setBounds(widh,90+(heigth*index),widh,heigth);
        group.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
        group.setHorizontalAlignment(JLabel.CENTER);
        group.setVerticalAlignment(JLabel.CENTER);
@@ -84,11 +84,11 @@ public class Table {
        componentArrayList.add(group);
        JLabel[] jLable = new JLabel[10];
        for(int i=0;i<10;i++){
-           jLable[i] = new JLabel(student.getPublicWork().get(i));
+           jLable[i] = new JLabel(strings[4+i]);
            jLable[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
            jLable[i].setHorizontalAlignment(JLabel.CENTER);
            jLable[i].setVerticalAlignment(JLabel.CENTER);
-           jLable[i].setBounds(widh*(2+i),90+(heigth*studentArrayList.indexOf(student)),widh,heigth);
+           jLable[i].setBounds(widh*(2+i),90+(heigth*index),widh,heigth);
            window.add(jLable[i]);
            componentArrayList.add(jLable[i]);
        }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Table {
     int widh=130;
     int heigth=20;
+    int heigthAligment=50;
     //JFrame jFrame;
     Window window;
     JLabel fio;
@@ -22,28 +23,33 @@ public class Table {
         this.window=window;
         jLable= new JLabel[10];
     }
-
+    public Table(int heigthAligment, Window window){
+        componentArrayList=new ArrayList<Component>();
+        this.heigthAligment=heigthAligment;
+        this.window=window;
+        jLable= new JLabel[10];
+    }
     public void renderTable(ArrayList<String[]> stringArrayList) {
         for(Component component:componentArrayList){
             window.remove(component);
         }
         componentArrayList.clear();
         fio= new JLabel("ФИО");
-        fio.setBounds(0,50,widh,heigth*2);
+        fio.setBounds(0,heigthAligment,widh,heigth*2);
         fio.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         fio.setHorizontalAlignment(JLabel.CENTER);
         fio.setVerticalAlignment(JLabel.CENTER);
         window.add(fio);
         componentArrayList.add(fio);
         group= new JLabel("Группа");
-        group.setBounds(widh,50,widh,heigth*2);
+        group.setBounds(widh,heigthAligment,widh,heigth*2);
         group.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         group.setHorizontalAlignment(JLabel.CENTER);
         group.setVerticalAlignment(JLabel.CENTER);
         window.add(group);
         componentArrayList.add(group);
         publicWorsk= new JLabel("Общественные работы");
-        publicWorsk.setBounds(widh*2,50,widh*10,heigth);
+        publicWorsk.setBounds(widh*2,heigthAligment,widh*10,heigth);
         publicWorsk.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         publicWorsk.setHorizontalAlignment(JLabel.CENTER);
         publicWorsk.setVerticalAlignment(JLabel.CENTER);
@@ -55,7 +61,7 @@ public class Table {
             jLable[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
             jLable[i].setHorizontalAlignment(JLabel.CENTER);
             jLable[i].setVerticalAlignment(JLabel.CENTER);
-            jLable[i].setBounds(widh*(2+i),70,widh,heigth);
+            jLable[i].setBounds(widh*(2+i),heigthAligment+heigth,widh,heigth);
             window.add(jLable[i]);
         }
         for(String[] stringsArr: stringArrayList){
@@ -68,7 +74,7 @@ public class Table {
 
    void createRow(String[] strings, int index){
        JLabel name = new JLabel(" "+strings[0]+" "+strings[1]+" "+strings[2]);
-       name.setBounds(0,90+(heigth*index),widh,heigth);
+       name.setBounds(0,heigthAligment+heigth*2+(heigth*index),widh,heigth);
        //System.out.println(name.getY()+"----");
        name.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
        //name.setHorizontalAlignment(JLabel.CENTER);
@@ -76,7 +82,7 @@ public class Table {
        window.add(name);
        componentArrayList.add(name);
        JLabel group = new JLabel(strings[3]);
-       group.setBounds(widh,90+(heigth*index),widh,heigth);
+       group.setBounds(widh,heigthAligment+heigth*2+(heigth*index),widh,heigth);
        group.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
        group.setHorizontalAlignment(JLabel.CENTER);
        group.setVerticalAlignment(JLabel.CENTER);
@@ -88,7 +94,7 @@ public class Table {
            jLable[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
            jLable[i].setHorizontalAlignment(JLabel.CENTER);
            jLable[i].setVerticalAlignment(JLabel.CENTER);
-           jLable[i].setBounds(widh*(2+i),90+(heigth*index),widh,heigth);
+           jLable[i].setBounds(widh*(2+i),heigthAligment+heigth*2+(heigth*index),widh,heigth);
            window.add(jLable[i]);
            componentArrayList.add(jLable[i]);
        }

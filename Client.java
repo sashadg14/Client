@@ -4,13 +4,17 @@
 import com.company.View;
 import com.company.controllers.RequestManager;
 
-import java.io.*;
-import java.net.*;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 public class Client {
     public static void main(String[] args) throws IOException {
-        System.out.println("Welcome to Client side");
-
+        BufferedReader in = null;
+        PrintWriter out = null;
+        RequestManager requestManager = new RequestManager(in,out);
+        View view = new View(requestManager);
         Socket fromserver = null;
 
    /* if (args.length==0) {
@@ -21,13 +25,11 @@ public class Client {
         //System.out.println("Connecting to... "+args[0]);
 
         fromserver = new Socket("localhost",4444);
-        BufferedReader in  = new
-                BufferedReader(new
+        in= new BufferedReader(new
                 InputStreamReader(fromserver.getInputStream()));
-        PrintWriter out = new PrintWriter(fromserver.getOutputStream(),true);
+        out= new PrintWriter(fromserver.getOutputStream(),true);
         BufferedReader inu = new BufferedReader(new InputStreamReader(System.in));
-        RequestManager requestManager = new RequestManager(in,out);
-        View view = new View(requestManager);
+
 
         String fuser = null,fserver;
 
@@ -42,25 +44,7 @@ public class Client {
         inu.close();
         fromserver.close();
     }
+    void readFromFile(){
 
-    /*static void addStudent(BufferedReader bufferedReader,PrintWriter out) throws IOException {
-        out.println("ADD");
-        for(int i=0;i<14;i++){
-            out.println(i+" chislo");
-        }
-        String fserver;
-        if((fserver = bufferedReader.readLine())!=""){
-            System.out.println(fserver);
-        }
-        int count = Integer.parseInt(fserver);
-        while (count>0){
-            int schetchik=0;
-            while (schetchik<14)
-            if((fserver = bufferedReader.readLine())!=""){
-                System.out.println(fserver+" from server"+count);
-                schetchik++;
-            }
-            count--;
-        }
-    }*/
+    }
 }

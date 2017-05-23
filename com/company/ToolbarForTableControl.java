@@ -19,27 +19,46 @@ public class ToolbarForTableControl {
     JButton rightButton;
     JButton leftButtonToEnd;
     JButton rightButtonToEnd;
-    public ToolbarForTableControl(RequestManager requestManager, Window window, Table table){
+    JButton resizeButton;
+    Table table;
+    JLabel jLabel;
+    int posX,posY;
+    public ToolbarForTableControl(int posX, int posY, RequestManager requestManager, Window window, Table table){
         this.requestManager=requestManager;
         this.window=window;
+        this.table=table;
+        this.posX=posX;
+        this.posY=posY;
+        jLabel=new JLabel();
+       // window.add(jLabel);
         leftButton = new JButton();
         rightButton = new JButton();
         leftButtonToEnd = new JButton();
         rightButtonToEnd = new JButton();
+        resizeButton = new JButton();
         leftButton.setIcon(new ImageIcon("src\\com\\company\\resourses\\left.png"));
         rightButton.setIcon(new ImageIcon("src\\com\\company\\resourses\\right.png"));
         leftButtonToEnd.setIcon(new ImageIcon("src\\com\\company\\resourses\\left_1.png"));
         rightButtonToEnd.setIcon(new ImageIcon("src\\com\\company\\resourses\\right_1.png"));
+        resizeButton.setIcon(new ImageIcon("src\\com\\company\\resourses\\resize.png"));
         JToolBar jToolBarSecond = new JToolBar("Toolbar", JToolBar.HORIZONTAL);
         jToolBarSecond.add(leftButtonToEnd);
         jToolBarSecond.add(leftButton);
         jToolBarSecond.add(rightButton);
         jToolBarSecond.add(rightButtonToEnd);
-        jToolBarSecond.setBounds(800,800,1600,30);
-        setListeners(table);
+        jToolBarSecond.add(resizeButton);
+        createJLable();
+        jToolBarSecond.add(jLabel);
+        jToolBarSecond.setBounds(posX,posY,1600,30);
+        setListeners();
         window.add(jToolBarSecond);
     }
-    private void setListeners(final Table table) {
+    public void createJLable(){
+        jLabel.setText(requestManager.getInformOboutTable());
+    }
+
+    private void setListeners()
+    {
         rightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -49,9 +68,9 @@ public class ToolbarForTableControl {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                createJLable();
             }
         });
-
         leftButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -61,6 +80,7 @@ public class ToolbarForTableControl {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                createJLable();
             }
         });
         rightButtonToEnd.addActionListener(new ActionListener() {
@@ -72,6 +92,7 @@ public class ToolbarForTableControl {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                createJLable();
             }
         });
         leftButtonToEnd.addActionListener(new ActionListener() {
@@ -83,8 +104,42 @@ public class ToolbarForTableControl {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                createJLable();
+            }
+        });
+
+        resizeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String number=JOptionPane.showInputDialog("Введите число студентов на странице");
+                if(number!=""||number!=null) {
+                    try {
+                        requestManager.resizePageRequest(Integer.parseInt(number));
+                        table.renderTable(requestManager.getBasicPage());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }}
             }
         });
     }
 
+    public JButton getLeftButton() {
+        return leftButton;
+    }
+
+    public JButton getRightButton() {
+        return rightButton;
+    }
+
+    public JButton getLeftButtonToEnd() {
+        return leftButtonToEnd;
+    }
+
+    public JButton getRightButtonToEnd() {
+        return rightButtonToEnd;
+    }
+
+    public JButton getResizeButton() {
+        return resizeButton;
+    }
 }

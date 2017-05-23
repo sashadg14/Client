@@ -22,6 +22,7 @@ public class View {
     JButton loadButton;
     TextField ip;
     TextField port;
+    JButton start;
     Table table;
     RequestManager requestManager;
     ToolbarForTableControl toolbarForTableControl;
@@ -29,7 +30,7 @@ public class View {
        jFrame= new JFrame();
        this.requestManager = requestManager;
        table= new Table(jFrame);
-       toolbarForTableControl=new ToolbarForTableControl(requestManager,jFrame, table);
+       toolbarForTableControl=new ToolbarForTableControl(700,700,requestManager,jFrame, table);
        jFrame.getContentPane().setLayout(null);
        jFrame.setSize(1000,800);
        jFrame.setVisible(true);
@@ -44,6 +45,7 @@ public class View {
        saveButton.setIcon(new ImageIcon("src\\com\\company\\resourses\\save.png"));
        loadButton.setIcon(new ImageIcon("src\\com\\company\\resourses\\load.png"));
        JToolBar jToolBar=new JToolBar("",JToolBar.HORIZONTAL);
+       start=new JButton("START");
        ip=new TextField();
        ip.setText("localhost");
        ip.setBounds(700,0,150,20);
@@ -52,6 +54,8 @@ public class View {
        port.setBounds(700,30,100,20);
        port.setText("4444");
        jFrame.add(port);
+       start.setBounds(900,30,50,20);
+      // jFrame.add(start);КНОПКА
        creatingTolbar();
        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
    }
@@ -68,7 +72,8 @@ public class View {
         JToolBar toolbar = new JToolBar("Toolbar", JToolBar.HORIZONTAL);
         findButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                new FindView(requestManager);
+                new FindView(requestManager).createFindWindow();
+
             }
         });
         addButton.addActionListener(new ActionListener() {
@@ -77,7 +82,7 @@ public class View {
             }
         });
         deleteButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) { new DeleteView(requestManager,View.this);
+            public void actionPerformed(ActionEvent event) { new DeleteView(requestManager,View.this).createDeleteWindow();
           //  renderTable();
             }
         });
@@ -133,4 +138,15 @@ public class View {
            e.printStackTrace();
        }
    }
+
+    public TextField getIpField() {
+        return ip;
+    }
+    public TextField getPortField() {
+        return port;
+    }
+
+    public JButton getStart() {
+        return start;
+    }
 }

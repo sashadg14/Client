@@ -11,10 +11,25 @@ import java.util.ArrayList;
 public class RequestManager {
     private BufferedReader in;
     private PrintWriter out;
+    int countOfStudentsOnPage =5;
+    String informOboutTable="iiiiii";
     public RequestManager(BufferedReader in, PrintWriter out){
         this.in=in;
         this.out=out;
     }
+    public int getCountOfStudentsOnList(){
+        return countOfStudentsOnPage;
+    }
+    public void resizePageRequest(int countOfStudents) throws IOException {
+        out.println("RESIZE");
+        this.countOfStudentsOnPage =countOfStudents;
+            out.println(countOfStudents);
+    }
+
+    public String getInformOboutTable() {
+        return informOboutTable;
+    }
+
     public void AddNewStudentInBase(ArrayList<String> stringArrayList) throws IOException {
         out.println("ADD");
         for(int i=0;i<14;i++){
@@ -24,19 +39,18 @@ public class RequestManager {
 
     public ArrayList<String[]> getBasicPage() throws IOException {
         out.println("GET PAGE");
+
         return getPage();
     }
 
     private ArrayList<String[]> getPage() throws IOException{
         String fserver;
-        if((fserver = in.readLine())!=""&&(fserver)!="\0"&&(fserver)!=null) {
-            System.out.println(fserver+" -------");
-        }
-        int count = Integer.parseInt(fserver);
-        System.out.println(count+" +++---");
+        countOfStudentsOnPage = Integer.parseInt(in.readLine());
+        informOboutTable=in.readLine();
+        System.out.println(countOfStudentsOnPage +" +++---");
         ArrayList<String[]> arrayListOfDatas = new ArrayList<>();
         int i=0;
-        while (i<count){
+        while (i< countOfStudentsOnPage){
             int schetchik=0;
             String[] tempMass=new String[14];
             while (schetchik<14)
@@ -62,6 +76,7 @@ public class RequestManager {
     }
     public int deleteStudentByNameAndWorkRequest(String name, String work) throws IOException {
         out.println("DELETE BY NAME & WORK");
+        System.out.println("DELETE BY NAME & WORK");
         out.println(name);
         out.println(work);
         String fserver;

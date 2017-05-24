@@ -20,15 +20,12 @@ public class View {
     JButton deleteButton;
     JButton saveButton;
     JButton loadButton;
-    TextField ip;
-    TextField port;
     JButton start;
     Table table;
     RequestManager requestManager;
     ToolbarForTableControl toolbarForTableControl;
-   public View(RequestManager requestManager){
+   public View(final Client client){
        jFrame= new JFrame();
-       this.requestManager = requestManager;
        table= new Table(jFrame);
        toolbarForTableControl=new ToolbarForTableControl(700,700,requestManager,jFrame, table);
        jFrame.getContentPane().setLayout(null);
@@ -39,26 +36,30 @@ public class View {
         deleteButton = new JButton();
         saveButton=new JButton();
         loadButton=new JButton();
-       findButton.setIcon(new ImageIcon("src\\com\\company\\resourses\\findIcon.png"));
-       addButton.setIcon(new ImageIcon("src\\com\\company\\resourses\\addIcon.png"));
-       deleteButton.setIcon(new ImageIcon("src\\com\\company\\resourses\\delete.png"));
-       saveButton.setIcon(new ImageIcon("src\\com\\company\\resourses\\save.png"));
-       loadButton.setIcon(new ImageIcon("src\\com\\company\\resourses\\load.png"));
+       findButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("findIcon.png")));
+       addButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("addIcon.png")));
+       deleteButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("delete.png")));
+       saveButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("save.png")));
+       loadButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("load.png")));
        JToolBar jToolBar=new JToolBar("",JToolBar.HORIZONTAL);
-       start=new JButton("START");
-       ip=new TextField();
-       ip.setText("localhost");
-       ip.setBounds(700,0,150,20);
-       jFrame.add(ip);
-       port=new TextField();
-       port.setBounds(700,30,100,20);
-       port.setText("4444");
-       jFrame.add(port);
-       start.setBounds(900,30,50,20);
-      // jFrame.add(start);КНОПКА
+       start=new JButton("start");
+       start.setBounds(700,30,70,20);
+       jFrame.add(start);
+       start.addActionListener(new ActionListener() {
+           @Override
+           public void actionPerformed(ActionEvent actionEvent) {
+               new ConnectionDialog().setClient(client);
+           }
+       });
        creatingTolbar();
+       creatingMenu();
        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
    }
+
+    public void setRequestManager(RequestManager requestManager) {
+        this.requestManager = requestManager;
+        toolbarForTableControl.setRequestManager(requestManager);
+    }
 
     public Table getTable() {
         return table;
@@ -120,31 +121,92 @@ public class View {
         jFrame.getContentPane().setLayout(null);
         toolbar.setBounds(0,0,1600,50);
         jFrame.add(toolbar);
-        renderTable();
+        //renderTable();
         jFrame.update(jFrame.getGraphics());
         //jFrame.getContentPane().setLayout(null);
     }
-    public String getIP(){
-       return ip.getText();
-    }
-   public String getPort(){
-       return port.getText();
+    private void creatingMenu(){
+        JMenuBar menuBar = new JMenuBar();
+        jFrame.setJMenuBar(menuBar);
+        JMenu fileMenu = new JMenu("Файл");
+        menuBar.add(fileMenu);
+        fileMenu.add(new JMenuItem(new AbstractAction("Сохранить как...") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                saveButton.doClick();
+            }
+        }));
+        fileMenu.add(new JMenuItem(new AbstractAction("Загрузить") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                loadButton.doClick();
+            }
+        }));
+
+        JMenu dataBase = new JMenu("База студентов");
+        menuBar.add(dataBase);
+        dataBase.add(new JMenuItem(new AbstractAction("Добавить") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                addButton.doClick();
+            }
+        }));
+        dataBase.add(new JMenuItem(new AbstractAction("Удалить") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                deleteButton.doClick();
+            }
+        }));
+        dataBase.add(new JMenuItem(new AbstractAction("Поиск") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                findButton.doClick();
+            }
+        }));
+
+        JMenu table = new JMenu("Таблица");
+        menuBar.add(table);
+        dataBase.add(new JMenuItem(new AbstractAction("Следующая страница") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                toolbarForTableControl.getRightButton().doClick();
+            }
+        }));
+        table.add(new JMenuItem(new AbstractAction("Предыдущая страница") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                toolbarForTableControl.getLeftButton().doClick();
+            }
+        }));
+        table.add(new JMenuItem(new AbstractAction("Первая страница") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                toolbarForTableControl.getLeftButtonToEnd().doClick();
+            }
+        }));
+        table.add(new JMenuItem(new AbstractAction("Последняя страница") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                toolbarForTableControl.getRightButtonToEnd().doClick();
+            }
+        }));
+        table.add(new JMenuItem(new AbstractAction("Изменить размер страницы") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                toolbarForTableControl.getResizeButton().doClick();
+            }
+        }));
     }
    public void renderTable(){
 
        try {
            table.renderTable(requestManager.getBasicPage());
+           toolbarForTableControl.createJLable();
        } catch (IOException e) {
            e.printStackTrace();
        }
    }
 
-    public TextField getIpField() {
-        return ip;
-    }
-    public TextField getPortField() {
-        return port;
-    }
 
     public JButton getStart() {
         return start;

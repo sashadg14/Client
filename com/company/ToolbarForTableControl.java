@@ -36,25 +36,26 @@ public class ToolbarForTableControl {
         leftButtonToEnd = new JButton();
         rightButtonToEnd = new JButton();
         resizeButton = new JButton();
-        leftButton.setIcon(new ImageIcon("src\\com\\company\\resourses\\left.png"));
-        rightButton.setIcon(new ImageIcon("src\\com\\company\\resourses\\right.png"));
-        leftButtonToEnd.setIcon(new ImageIcon("src\\com\\company\\resourses\\left_1.png"));
-        rightButtonToEnd.setIcon(new ImageIcon("src\\com\\company\\resourses\\right_1.png"));
-        resizeButton.setIcon(new ImageIcon("src\\com\\company\\resourses\\resize.png"));
+        leftButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("left.png")));
+        rightButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("right.png")));
+        leftButtonToEnd.setIcon(new ImageIcon(getClass().getClassLoader().getResource("left_1.png")));
+        rightButtonToEnd.setIcon(new ImageIcon(getClass().getClassLoader().getResource("right_1.png")));
+        resizeButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("resize.png")));
         JToolBar jToolBarSecond = new JToolBar("Toolbar", JToolBar.HORIZONTAL);
         jToolBarSecond.add(leftButtonToEnd);
         jToolBarSecond.add(leftButton);
         jToolBarSecond.add(rightButton);
         jToolBarSecond.add(rightButtonToEnd);
         jToolBarSecond.add(resizeButton);
-        createJLable();
+        //createJLable();
         jToolBarSecond.add(jLabel);
         jToolBarSecond.setBounds(posX,posY,1600,30);
         setListeners();
         window.add(jToolBarSecond);
     }
     public void createJLable(){
-        jLabel.setText(requestManager.getInformOboutTable());
+        jLabel.setText(requestManager.getInformOboutTable()
+        );
     }
 
     private void setListeners()
@@ -116,6 +117,7 @@ public class ToolbarForTableControl {
                     try {
                         requestManager.resizePageRequest(Integer.parseInt(number));
                         table.renderTable(requestManager.getBasicPage());
+                        createJLable();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }}
@@ -141,5 +143,9 @@ public class ToolbarForTableControl {
 
     public JButton getResizeButton() {
         return resizeButton;
+    }
+
+    public void setRequestManager(RequestManager requestManager) {
+        this.requestManager = requestManager;
     }
 }
